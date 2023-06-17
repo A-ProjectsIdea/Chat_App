@@ -12,7 +12,7 @@ app.get("/", (req, res) => res.send("Hello World!"));
 app.use(cors());
 
 io.on("connection", (socket) => {
-  console.log(socket);
+  console.log(socket.id);
   auth(io, socket);
 });
 server.listen(port, () =>

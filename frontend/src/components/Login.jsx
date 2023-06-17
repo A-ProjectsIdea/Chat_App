@@ -1,12 +1,15 @@
 import { connect } from "../socket/auth";
-const Login = ({ socket }) => {
-  const handelSubmit = (e) => {
+const Login = ({ socket, setIsActive }) => {
+  const handelSubmit = async (e) => {
     e.preventDefault();
 
     const form = e.target;
     const formFields = form.elements.nickname.value;
-    const isconnected = connect(socket, formFields);
-    console.log("isconnected: ", isconnected);
+    const isconnected = await connect({
+      socket,
+      id: formFields,
+      setState: setIsActive,
+    });
   };
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -25,7 +28,7 @@ const Login = ({ socket }) => {
         <form className="space-y-6" onSubmit={handelSubmit}>
           <div>
             <label
-              for="nickname"
+              htmlFor="nickname"
               className="block text-sm font-medium leading-6 text-gray-900"
             >
               Nickname
@@ -35,7 +38,7 @@ const Login = ({ socket }) => {
                 id="nickname"
                 name="nickname"
                 type="text"
-                autocomplete="nickname"
+                autoComplete="nickname"
                 required
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
