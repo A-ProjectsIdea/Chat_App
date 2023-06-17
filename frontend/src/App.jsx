@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, createContext } from "react";
 import "./App.css";
-import Login from "./components/login";
+import Login from "./components/Login";
 import { io } from "socket.io-client";
 import Home from "./components/Home";
 const socket = io("http://localhost:5000/", {
@@ -11,17 +11,19 @@ const socket = io("http://localhost:5000/", {
     token: null,
   },
 });
+export const ActiveContext = createContext(null);
 function App() {
   const [isActive, setIsActive] = useState(
-    localStorage.getItem("isActive") || false
+    sessionStorage.getItem("isActive") || false
   );
+  const [id, setId] = useState(sessionStorage.getItem("id"));
   return (
     <>
-      {!isActive ? (
-        <Login socket={socket} setIsActive={setIsActive} />
-      ) : (
-        <Home />
-      )}
+      <ActiveContext.Provider
+        value={{ isActive, setIsActive, id, setId, socket }}
+      >
+        {!isActive ? <Login /> : <Home />}
+      </ActiveContext.Provider>
     </>
   );
 }

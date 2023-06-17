@@ -1,14 +1,18 @@
 import { connect } from "../socket/auth";
-const Login = ({ socket, setIsActive }) => {
+import { useContext } from "react";
+import { ActiveContext } from "../App";
+const Login = () => {
+  const { socket, setIsActive, setId } = useContext(ActiveContext);
   const handelSubmit = async (e) => {
     e.preventDefault();
 
     const form = e.target;
     const formFields = form.elements.nickname.value;
-    const isconnected = await connect({
+    connect({
       socket,
       id: formFields,
-      setState: setIsActive,
+      setIsActive,
+      setId,
     });
   };
   return (

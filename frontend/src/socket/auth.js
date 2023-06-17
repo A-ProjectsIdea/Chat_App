@@ -1,9 +1,10 @@
-const connect = ({ socket, id, setState }) => {
+const connect = ({ socket, id, setId, setIsActive }) => {
   socket.auth.token = id;
   socket.connect();
   socket.on("connect", () => {
-    setState(true);
-    localStorage.setItem("isActive", true);
+    setIsActive(true);
+    setId(id);
+    sessionStorage.setItem("isActive", true);
   });
   // return connection.connected;
 };

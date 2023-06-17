@@ -1,9 +1,21 @@
-import React from "react";
+import { sendMessage } from "../socket/message";
+import { useContext } from "react";
+import { ActiveContext } from "../App";
 
 const Form = () => {
+  const { socket } = useContext(ActiveContext);
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formFields = form.elements[0].value;
+    form.elements[0].value = "";
+    console.log(formFields);
+    sendMessage();
+  };
+
   return (
     <div className="h-auto border-solid border-2 border-gray-100">
-      <form>
+      <form onSubmit={handelSubmit}>
         <label htmlFor="chat" className="sr-only">
           Your message
         </label>
