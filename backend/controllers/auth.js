@@ -26,6 +26,7 @@ authController.auth = (io, socket) => {
   if (token && !exist) {
     chat(io, socket);
     socket.on("disconnect", (socket) => {
+      console.log("id", socket.id);
       authController.deleteUser(socket.id, authController.users);
     });
   } else {

@@ -12,15 +12,17 @@ import { ActiveContext } from "../App";
 const ChatView = () => {
   const { socket, id } = useContext(ActiveContext);
   return (
-    <div className="h-4/5 border-solid border-2 border-gray-100 ">
+    <div className="flex flex-col h-4/5 border-solid border-2 border-gray-100 w-full ">
       {messages &&
         messages.map((obj, idx) => {
           return (
             <div
               key={obj.id + idx}
               id="toast-message-cta"
-              className={`relative w-4/5 max-w-xs p-1 text-gray-500 rounded-lg shadow dark:bg-gray-800 dark:text-gray-400 m-1 ${
-                id == obj.id ? "bg-white" : "bg-emerald-300 left-2/4"
+              className={` self-start sm:w-80 xs:w-60 max-w-xs p-1 text-gray-500 rounded-lg shadow dark:bg-gray-800 dark:text-gray-400 m-1 ${
+                id == obj.id
+                  ? "bg-white"
+                  : "bg-emerald-300 lg:left-2/4 self-end "
               }`}
               // +
               role="alert"
