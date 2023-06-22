@@ -17,10 +17,11 @@ function App() {
     sessionStorage.getItem("isActive") || false
   );
   const [id, setId] = useState(sessionStorage.getItem("id"));
+  const [room, setRoom] = useState(null);
   return (
     <>
       <ActiveContext.Provider
-        value={{ isActive, setIsActive, id, setId, socket }}
+        value={{ isActive, setIsActive, id, setId, socket, room, setRoom }}
       >
         {!isActive ? <Login /> : <Home />}
       </ActiveContext.Provider>

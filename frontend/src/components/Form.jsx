@@ -3,14 +3,14 @@ import { useContext } from "react";
 import { ActiveContext } from "../App";
 
 const Form = () => {
-  const { socket } = useContext(ActiveContext);
+  const { socket, id } = useContext(ActiveContext);
   const handelSubmit = (e) => {
     e.preventDefault();
     const form = e.target;
     const formFields = form.elements[0].value;
     form.elements[0].value = "";
     console.log(formFields);
-    sendMessage();
+    sendMessage({ socket, data: { message: formFields, id, room } });
   };
 
   return (
