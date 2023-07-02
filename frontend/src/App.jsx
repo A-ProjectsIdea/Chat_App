@@ -3,6 +3,7 @@ import "./App.css";
 import Login from "./components/Login";
 import { io } from "socket.io-client";
 import Home from "./components/Home";
+import Room from "./components/Room";
 const socket = io("http://localhost:5000/", {
   autoConnect: false,
   reconnectionDelayMax: 2000,
@@ -23,7 +24,9 @@ function App() {
       <ActiveContext.Provider
         value={{ isActive, setIsActive, id, setId, socket, room, setRoom }}
       >
-        {!isActive ? <Login /> : <Home />}
+        {!isActive && <Login />}
+        {isActive && room && <Home />}
+        {isActive && !room && <Room />}
       </ActiveContext.Provider>
     </>
   );

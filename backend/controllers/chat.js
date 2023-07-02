@@ -1,10 +1,15 @@
 const chatController = {};
-
+const { findUser, users } = require("./auth");
 chatController.chat = (io, socket) => {
-  socket.on("message", (data) => {
-    console.log(data);
-    io.to(data.room).emit("message", data);
-  });
+  const found = findUser(socket.id, users);
+  console.log(found);
+  if (found) {
+    socket.on("message", (data) => {
+      console.log(data);
+      // io.to(data.room).emit("message", data);
+      io.emit("message", data);
+    });
+  }
 };
 
 module.exports = chatController;

@@ -9,8 +9,7 @@ const Form = () => {
     const form = e.target;
     const formFields = form.elements[0].value;
     form.elements[0].value = "";
-    console.log(formFields);
-    sendMessage({ socket, data: { message: formFields, id, room } });
+    sendMessage({ socket, data: { message: formFields, id } });
   };
 
   return (
