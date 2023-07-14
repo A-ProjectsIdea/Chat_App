@@ -1,5 +1,4 @@
 const joinRoom = ({ socket, id }) => {
-  console.log(socket);
   socket.emit("join", { id });
 };
 
@@ -9,7 +8,7 @@ const joinedRoom = ({ socket, setRoom }) => {
     setRoom(data.room);
   });
 };
-const leaveRoom = ({ socket }) => {
+const leaveRoom = ({ socket, room }) => {
   socket.leave(room);
   socket.to(room).emit("user left");
 };

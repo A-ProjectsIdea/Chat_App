@@ -1,4 +1,4 @@
-const { rooms, toggleRooms } = require("./room");
+const { rooms, toggleRooms, toggleActive } = require("./room");
 
 const authController = {};
 
@@ -20,8 +20,9 @@ authController.addUser = (user, users) => {
 };
 authController.deleteUser = (socket_id, users) => {
   const index = users.findIndex((user) => socket_id === user.socket_id);
-  users.splice(index, 1);
+  rooms.length > 0 && toggleActive(users[index], rooms);
   toggleRooms(authController.users.length, rooms);
+  users.splice(index, 1);
 };
 
 //--------------------------AUTH-----------------------------
@@ -36,11 +37,10 @@ authController.auth = (io, socket) => {
     );
 
     socket.on("disconnect", () => {
-      console.log(socket.id);
+      console.log("socket.id", socket.id);
       authController.deleteUser(socket.id, authController.users);
     });
   } else {
-    console.log("hhh");
     socket.disconnect();
   }
 };

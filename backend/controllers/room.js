@@ -14,9 +14,28 @@ roomController.toggleRooms = (num, array) => {
     });
   }
 };
+roomController.toggleActive = (user, array) => {
+  const found = array.find((room, idx) => {
+    return (
+      room.users[0] == user.id ||
+      room.users[1] == user.id ||
+      room.users[2] == user.id
+    );
+  });
+  if (!found) {
+    return;
+  }
+  if (found.users.length < 2) {
+    found.active = false;
+    found.users = [];
+  } else {
+    found.users.splice(found.users.indexOf(user.id), 1);
+  }
+};
+
 roomController.join = (io, room) => {
+  console.log("room");
   room.active = true;
-  console.log(room);
   io.sockets.in(room.id).emit("join", { room: room.id });
 };
 roomController.room = (io, socket) => {
@@ -30,13 +49,11 @@ roomController.room = (io, socket) => {
     if (found) {
       found.users.push(data.id);
       socket.join(found.id);
-      console.log(found);
-      roomController.join(io, found.id);
-      id && clearTimeout(id);
       if (found.users.length === 3) {
+        id && clearTimeout(id);
         roomController.join(io, found);
       } else if (found.users.length === 2) {
-        setTimeout(() => {
+        id = setTimeout(() => {
           roomController.join(io, found);
         }, 3000);
       }

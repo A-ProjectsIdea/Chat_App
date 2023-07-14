@@ -1,19 +1,13 @@
-import { connect } from "../socket/auth";
 import { useContext } from "react";
 import { ActiveContext } from "../App";
 const Login = () => {
-  const { socket, setIsActive, setId } = useContext(ActiveContext);
+  const { setIsActive, setId } = useContext(ActiveContext);
   const handelSubmit = async (e) => {
     e.preventDefault();
-
     const form = e.target;
     const formFields = form.elements.nickname.value;
-    connect({
-      socket,
-      id: formFields,
-      setIsActive,
-      setId,
-    });
+    setId(formFields);
+    setIsActive(true);
   };
   return (
     <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
