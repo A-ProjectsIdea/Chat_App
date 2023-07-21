@@ -22,6 +22,7 @@ roomController.toggleActive = (user, array) => {
       room.users[2] == user.id
     );
   });
+  console.log(sss);
   if (!found) {
     return;
   }
