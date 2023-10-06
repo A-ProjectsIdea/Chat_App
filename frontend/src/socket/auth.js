@@ -4,9 +4,6 @@ const connect = ({ socket, id }) => {
   socket.on("connect", () => {
     sessionStorage.setItem("isActive", true);
     sessionStorage.setItem("id", id);
-    console.log("====================================");
-    console.log("connected");
-    console.log("====================================");
   });
   // return connection.connected;
 };

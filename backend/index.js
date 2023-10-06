@@ -8,16 +8,18 @@ const { Server } = require("socket.io");
 const { chat } = require("./controllers/chat");
 const { room } = require("./controllers/room");
 const { auth } = require("./controllers/auth");
-
+const { authentication } = require("./middlewares/authentication");
+require("./modules/redis");
 const io = new Server(server, { origin: "*" });
 // socket connection auth
 app.get("/", (req, res) => res.send("Hello World!"));
 app.use(cors());
 
+io.use(authentication)
 io.on("connection", (socket) => {
   auth(io, socket);
-  room(io, socket);
-  chat(io, socket);
+  // room(io, socket);
+  // chat(io, socket);
 });
 server.listen(port, () =>
   console.log(`Example app listening on port ${port}!`)

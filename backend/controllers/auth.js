@@ -3,46 +3,35 @@ const { rooms, toggleRooms, toggleActive } = require("./room");
 const authController = {};
 
 //----------------------USER DATA------------------------------
-authController.users = [];
-
-authController.findUser = (id, users) => {
-  return (
-    users.find((user, idx) => {
-      return id === user.id || id === user.socket_id;
-    }) || false
-  );
-};
-authController.addUser = (user, users) => {
-  const id = user.id;
-  const found = authController.findUser(id, users);
-  !found && users.push(user);
-  toggleRooms(authController.users.length, rooms);
-};
-authController.deleteUser = (socket_id, users) => {
-  const index = users.findIndex((user) => socket_id === user.socket_id);
-  rooms.length > 0 && toggleActive(users[index], rooms);
-  toggleRooms(authController.users.length, rooms);
-  users.splice(index, 1);
-};
+authController.users = {};
 
 //--------------------------AUTH-----------------------------
 authController.auth = (io, socket) => {
-  const token = socket.handshake.auth.token;
-  const exist = authController.findUser(token, authController.users);
+  console.log(io.rooms);
+  const token = socket.handshake.auth;
+  authController.addUser = async () => {
+    token.socket_id = socket.id;
+    const user = await personRepository.createAndSave(token);
+    const id = user.id;
+    const found = authController.users[user.id];
+    if (!found || !found.isActive) {
+      user.socket_id = socket.id;
+      authController.users[user.id] = user;
+    } else {
+      authController.users[user.id].socket_id = socket.id;
+      authController.users[user.id].isActive = true;
+    }
+  };
 
-  if (token && !exist) {
-    authController.addUser(
-      { id: token, socket_id: socket.id },
-      authController.users
-    );
-
-    socket.on("disconnect", () => {
-      console.log("socket.id", socket.id);
-      authController.deleteUser(socket.id, authController.users);
-    });
-  } else {
-    socket.disconnect();
-  }
+  socket.on("disconnect", () => {
+    authController.deleteUser(socket.id, authController.users);
+    for (const key in authController.users) {
+      if (authController.users[key].socket_id === socket.id) {
+        authController.users[key].isActive = false;
+      }
+    }
+  });
+  authController.addUser();
 };
 
 module.exports = authController;
